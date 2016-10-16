@@ -16,10 +16,4 @@
     }
   })
 
-  app.filter('addItem', () => {
-    return (item) => {
-
-    }
-  })
-
 })()

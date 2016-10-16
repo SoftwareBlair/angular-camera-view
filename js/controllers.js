@@ -1,8 +1,8 @@
 (function () {
 
-  'use strict'
+  'use strict';
 
-  const app = angular.module('cameraApp')
+  const app = angular.module('cameraApp');
 
   app.controller('camerasCtrl', function () {
 
@@ -49,9 +49,9 @@
       }
     ]
 
-    this.selectVal = 'name'
+    this.selectVal = 'name';
 
-    this.searchCam = ''
+    this.searchCam = '';
 
   });
 
@@ -62,30 +62,53 @@
     this.tax = 0
     this.total = 0
 
-    this.addItem = (item) => {
+    this.addItem = function (item) {
 
-      let itemArr = this.cart.map((data) => {
-        return data.name
-      })
+      let itemArr = this.cart.map(data => data.name)
 
-      let itemIndex = itemArr.indexOf(item.name)
+      let itemIndex = itemArr.indexOf(item.name);
 
-      if (itemIndex === -1)
+      if(itemIndex < 0)
       {
-        this.item = 1
-        this.cart.push(item)
+        this.obj = Object.assign({}, item)
+        this.obj.quantity = 1
+        this.cart.push(this.obj)
       }
       else
       {
-        this.cart[itemIndex]++
+        this.cart[itemIndex].quantity++;
       }
 
-      this.subtotal += this.item.price
-      this.tax = parseFloat(this.subtotal) * 0.08
-      this.total = parseFloat(this.subtotal) + parseFloat(this.tax)
+      this.subtotal += this.obj.price
+      this.tax = this.subtotal * 0.08
+      this.total = this.subtotal + this.tax
+    }
+
+    this.delete = (item) => {
+
+      let itemArr = this.cart.map(data => data.name)
+
+      let itemIndex = itemArr.indexOf(item.name)
+
+      if (item.quantity === 1)
+      {
+        this.cart.splice(itemIndex, 1)
+
+        this.subtotal -= item.price
+        this.tax = this.subtotal * 0.08
+        this.total = this.subtotal + this.tax
+      }
+      else
+      {
+        this.cart[itemIndex].quantity--
+
+        this.subtotal -= item.price
+        this.tax = this.subtotal * 0.08
+        this.total = this.subtotal + this.tax
+      }
 
     }
 
-  })
+  });
 
-})()
+})();
